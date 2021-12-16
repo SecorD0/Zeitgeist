@@ -38,13 +38,13 @@ else
 	sudo apt install wget jq build-essential pkg-config libssl-dev -y
 	sudo useradd -M zeitgeist
 	sudo usermod zeitgeist -s /sbin/nologin
-	sudo mkdir -p /services/zeitgeist/bin
-	sudo mkdir -p /services/zeitgeist/battery_station
+	sudo mkdir -p /services/zeitgeist/bin /services/zeitgeist/battery_station
 	cd
 	zeitgeist_version=`wget -qO- https://api.github.com/repos/zeitgeistpm/zeitgeist/releases/latest | jq -r ".tag_name"`
 	wget -qO /services/zeitgeist/bin/zeitgeist "https://github.com/zeitgeistpm/zeitgeist/releases/download/${zeitgeist_version}/zeitgeist_parachain"
-	wget -qO /services/zeitgeist/battery_station/battery-station-relay.json "https://github.com/zeitgeistpm/zeitgeist/releases/download/${zeitgeist_version}/battery-station-relay.json"
+	wget -qO /services/zeitgeist/battery_station/battery-station-relay.json "https://raw.githubusercontent.com/zeitgeistpm/polkadot/battery-station-relay/node/service/res/battery-station-relay.json"
 	chmod +x /services/zeitgeist/bin/zeitgeist
+	cp /services/zeitgeist/bin/zeitgeist /usr/bin/
 	sudo chown -R zeitgeist:zeitgeist /services/zeitgeist
 	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/ports_opening.sh) 30333 9933 9944 30334 9934 9945
 	sudo tee <<EOF >/dev/null /etc/systemd/system/zeitgeistd.service
